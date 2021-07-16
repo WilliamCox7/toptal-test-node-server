@@ -1,0 +1,13 @@
+{
+  "dev": {
+    "ENV" : "MIGRATE_JAWSDB_URL"
+  },
+
+  "staging": {
+    "ENV" : "MIGRATE_JAWSDB_URL"
+  },
+
+  "production": {
+    "ENV" : "MIGRATE_JAWSDB_URL"
+  }
+}
