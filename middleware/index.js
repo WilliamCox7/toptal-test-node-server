@@ -1,3 +1,4 @@
 module.exports = {
-  authware: require("./authware")
+  authware: require("./authware"),
+  authwareJWT: require("./authware.jwt")
 }
