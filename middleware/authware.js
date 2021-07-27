@@ -1,8 +1,8 @@
-const modules = require("~/modules");
+const modules = require("../modules");
 const bcrypt = require("bcrypt");
 const LocalStrategy = require("passport-local").Strategy;
 
-module.exports = new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
+module.exports = new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
 
   try {
 
@@ -11,6 +11,8 @@ module.exports = new LocalStrategy({ usernameField: "email" }, (email, password,
   
     const valid = bcrypt.compareSync(password, user.password);
     if (!valid) return done(null, false, { message: "Incorrect Password" });
+
+    delete user.password;
   
     return done(null, user);
 

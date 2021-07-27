@@ -1,4 +1,4 @@
-const conn = require("database")();
+const conn = require("../database").connection();
 
 module.exports = async (email) => {
 

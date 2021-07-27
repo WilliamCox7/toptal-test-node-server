@@ -19,13 +19,14 @@
   "homepage": "https://github.com/WilliamCox7/toptal-test-node-server#readme",
   "dependencies": {
     "bcrypt": "^3.0.6",
-    "body-parser": "^1.18.3",
     "db-migrate": "^0.11.6",
     "db-migrate-mysql": "^2.1.0",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
     "express-session": "^1.16.1",
     "jsonwebtoken": "^8.5.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "promise-mysql": "^3.3.1",
     "request": "^2.88.0"
   },
@@ -33,14 +34,6 @@
     "jest": "^26.6.3"
   },
   "jest": {
-    "moduleNameMapper": {
-      "^utils/(.*)": "<rootDir>/utils/$1",
-      "^utils": "<rootDir>/utils",
-      "^dmvp/(.*)": "<rootDir>/dmvp/$1",
-      "^dmvp": "<rootDir>/dmvp",
-      "^nba/(.*)": "<rootDir>/nba/$1",
-      "^nba": "<rootDir>/nba"
-    },
     "testFailureExitCode": 0
   }
 }
