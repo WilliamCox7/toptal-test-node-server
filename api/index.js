@@ -8,7 +8,7 @@ module.exports = function(app) {
 
   app.post("/login", require("./login.post"));
   app.post("/authenticate", require("./authenticate.post"));
-  app.post("/user", middleware.authwareJWT, require("./user.post"));
+  app.post("/user", require("./user.post"));
   app.post("/user/profile", middleware.authwareJWT, require("./user.profile.post"));
   app.post("/restaurant", middleware.authwareJWT, require("./restaurant.post"));
   app.post("/review", middleware.authwareJWT, require("./review.post"));
