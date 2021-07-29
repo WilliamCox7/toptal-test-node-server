@@ -4,16 +4,29 @@ module.exports = async ({ userId, permission }) => {
 
   let _userId = conn.escape(userId);
   
-  let WHERE_CLAUSE = permission === "regular" || permission === "admin" ? `` : `
-    WHERE reply IS NULL AND review IS NOT NULL
+  let WHERE_CLAUSE = permission !== "owner" ? `` : `
+    WHERE r.ownerId = ${_userId}
+  `;
+
+  let USER_JOIN_SELECTS = permission === "owner" ? `` : `
+    ,c.userReviewId, c.userRating, c.userReview
+  `;
+
+  let USER_JOIN_CLAUSE = permission === "owner" ? `` : `
+    LEFT JOIN (
+      SELECT id as userReviewId, rating as userRating, review as userReview, restaurantId
+      FROM reviews
+      WHERE reviewerId = ${_userId}
+    ) c
+    ON c.restaurantId = r.id
   `;
 
   let results = await conn.query(`
     SELECT
       r.*,
       a.reviewId, a.restaurantId, a.reviewerId, a.date, a.rating, a.review, a.reply, a.userName, a.userImage,
-      b.reviewCount, b.avgRating,
-      c.userRating
+      b.reviewCount, b.avgRating
+      ${USER_JOIN_SELECTS}
     FROM restaurants as r
 
     LEFT JOIN (
@@ -21,7 +34,6 @@ module.exports = async ({ userId, permission }) => {
       FROM reviews
       INNER JOIN users
       ON reviewerId = users.id
-      ${WHERE_CLAUSE}
     ) a
 
     ON a.restaurantId = r.id
@@ -34,17 +46,18 @@ module.exports = async ({ userId, permission }) => {
 
     ON b.restaurantId = r.id
 
-    LEFT JOIN (
-      SELECT rating as userRating, restaurantId
-      FROM reviews
-      WHERE reviewerId = ${_userId}
-    ) c
+    ${USER_JOIN_CLAUSE}
 
-    ON c.restaurantId = r.id
+    ${WHERE_CLAUSE}
   `);
-  
-  let restaurants = results.filter((a, i, self) => !a.restaurantId || self.findIndex(b => b.restaurantId === a.restaurantId) === i);
 
-  return restaurants;
+  let restaurants = {};
+
+  results.forEach(r => {
+    if (!restaurants[r.restaurantId]) restaurants[r.restaurantId] = r;
+    else if (r.review && !r.reply) restaurants[r.restaurantId] = r;
+  });
+
+  return Object.values(restaurants);
 
 }

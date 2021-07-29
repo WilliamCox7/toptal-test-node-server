@@ -19,6 +19,7 @@ module.exports = async ({ id, restaurantId, reviewerId, rating, review, reply })
   let [{ avgRating }] = await conn.query(`
     SELECT AVG(rating) as avgRating
     FROM reviews
+    WHERE restaurantId = ${_restaurantId}
   `);
 
   return { avgRating, insertId: result.insertId };
