@@ -52,10 +52,10 @@ module.exports = async ({ userId, permission }) => {
   `);
 
   let restaurants = {};
-
+  
   results.forEach(r => {
-    if (!restaurants[r.restaurantId]) restaurants[r.restaurantId] = r;
-    else if (r.review && !r.reply) restaurants[r.restaurantId] = r;
+    if (!restaurants[r.id]) restaurants[r.id] = r;
+    else if (r.review && !r.reply) restaurants[r.id] = r;
   });
 
   return Object.values(restaurants);
